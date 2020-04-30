@@ -38,6 +38,9 @@ const listSchema = {
   items: [itemsSchema]
 };
 
+const List = mongoose.model("List", listSchema);
+
+
 app.get("/", function(req, res) {
   Item.find(function(err, foundItems) {
     if(err) {
@@ -85,6 +88,13 @@ app.post("/delete", function(req, res) {
 
 app.get("/:customList", function(req, res) {
   const listName = req.params.customList;
+
+  const newList = new List({
+    name: listSchema,
+    items: def_items
+  });
+
+  newList.save();
 
 
 });
