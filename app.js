@@ -33,6 +33,10 @@ const def_item3 = new Item({
 
 const def_items = [def_item1, def_item2, def_item3];
 
+const listSchema = {
+  name: String,
+  items: [itemsSchema]
+};
 
 app.get("/", function(req, res) {
   Item.find(function(err, foundItems) {
@@ -79,7 +83,11 @@ app.post("/delete", function(req, res) {
   });
 }); 
 
+app.get("/:customList", function(req, res) {
+  const listName = req.params.customList;
 
+
+});
 
 app.get("/about", function(req, res){
   res.render("about");
