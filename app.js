@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const _ = require("loadash");
 
 const app = express();
 
@@ -115,7 +116,7 @@ app.post("/delete", function(req, res) {
 }); 
 
 app.get("/:customList", function(req, res) {
-  const listName = req.params.customList;
+  const listName = _.capitalize(req.params.customList);
   List.findOne({name: listName}, function(err, foundList) {
     if(err) {
       console.log("Error occured!");
