@@ -7,6 +7,7 @@ A simple Todo-list built using __Express.js__, __Node.js__, __EJS__ for templati
 * Viewing saved items using MongoDB(Mongoose)
 * Routing using express.js
 * Creating custom modules.
+* __Deployment__ on **Heroku** and using __Mongo-Atlas cloud__ for connecting front-end with the back-end(Database)
 * Creating dynamic lists using MongoDB
 
 # Some screenshots
