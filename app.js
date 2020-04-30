@@ -40,7 +40,6 @@ const listSchema = {
 
 const List = mongoose.model("List", listSchema);
 
-
 app.get("/", function(req, res) {
   Item.find(function(err, foundItems) {
     if(err) {
@@ -65,13 +64,28 @@ app.get("/", function(req, res) {
 app.post("/", function(req, res){
 
   const itemName = req.body.newItem;
+  const listName = req.body.list;
   
   const newItem = new Item({
     name: itemName
   });
-
-  newItem.save();
-  res.redirect("/");
+  
+  if(listName === "Today") {
+    newItem.save();
+    res.redirect("/");
+  }
+  else {
+    List.findOne({name: listName}, function(err, foundList) {
+      if(err) {
+        console.log("Error occured!");
+      }
+      else {
+        foundList.items.push(newItem);
+        foundList.save();
+        res.redirect("/" + listName);
+      }
+    });
+  }
 });
 
 app.post("/delete", function(req, res) {
@@ -88,15 +102,23 @@ app.post("/delete", function(req, res) {
 
 app.get("/:customList", function(req, res) {
   const listName = req.params.customList;
-
-  const newList = new List({
-    name: listSchema,
-    items: def_items
+  List.findOne({name: listName}, function(err, foundList) {
+    if(err) {
+      console.log("Error occured!");
+    }
+    else {
+      if(!foundList) {
+        const item = new List({
+          name: listName,
+          items: def_items
+        });
+        item.save();
+      }
+      else {
+        res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+      }
+    }
   });
-
-  newList.save();
-
-
 });
 
 app.get("/about", function(req, res){
