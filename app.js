@@ -90,14 +90,28 @@ app.post("/", function(req, res){
 
 app.post("/delete", function(req, res) {
   const isChecked = req.body.checkbox;
-  Item.findByIdAndRemove(isChecked, function(err) {
-    if(err) {
-      console.log("Error occured!");
-    }
-    else {
-      res.redirect("/");
-    }
-  });
+  const listName = req.body.listName;
+
+  if(listName === "Today") {
+    Item.findByIdAndRemove(isChecked, function(err) {
+      if(err) {
+        console.log("Error occured!");
+      }
+      else {
+        res.redirect("/");
+      }
+    }); 
+  }
+  else {
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: isChecked}}}, function(err, foundList) {
+      if(err) {
+        console.log("Error occured!");
+      }
+      else {
+        res.redirect("/" + listName);
+      }
+    });
+  }
 }); 
 
 app.get("/:customList", function(req, res) {
